@@ -1,6 +1,9 @@
 package com.leo.liclitelicense.fragments;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
@@ -47,6 +50,7 @@ public class RenderServersWithoutUsersFragment extends Fragment{
 		
 		View v = inflater.inflate(R.layout.fragment_render_without_users, container, false);
 		this.serverWithoutListView = (ListView) v.findViewById(R.id.listview_servers_wihtout_users);
+		this.serverWithoutListView.setOnItemClickListener(new ServerWithoutListViewOnItemClickListenerImpl());
 		
 		this.autoCompleteTextViewWithoutUsers = (AutoCompleteTextView) v
 				.findViewById(R.id.autocomplete_fragment_render_without_users);
@@ -61,10 +65,29 @@ public class RenderServersWithoutUsersFragment extends Fragment{
 		}
 
 		
+		
+		
 		return v;
 	}
 	
 	
+	private class ServerWithoutListViewOnItemClickListenerImpl implements OnItemClickListener{
+
+		@Override
+		public void onItemClick(AdapterView<?> adapterView, View view, int position,
+				long id) {
+//System.out.println("click on ... " + position + " adapter size -> " + simplerAdapterHasNoUsers.getCount());
+//HashMap<String, String> map = (HashMap<String, String>)simplerAdapterHasNoUsers.getItem(position);
+//System.out.println(" adapter size -> " + map.get("server_feature_name_value"));
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author shqiu
+	 *
+	 */
 	private class AutoCompleteWithoutUsersOnItemClickListenerImpl implements OnItemClickListener{
 
 		@Override

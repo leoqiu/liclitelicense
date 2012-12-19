@@ -19,27 +19,22 @@ public class GetSshSessionAsyncTask extends AsyncTask<Void, Void, Boolean>{
 	private Context context = null;
 	private ServerListSimpleAdapter serverListSimpleAdapter = null;
 	
-	private ProgressDialog bar = null;
+	private ProgressDialog progress = null;
 	
 	public GetSshSessionAsyncTask(SshManager sshManager,
 			ServerListSimpleAdapter serverListSimpleAdapter, int position,
-			Context context) {
+			Context context, ProgressDialog progress) {
 		this.sshManager = sshManager;
 		this.serverListSimpleAdapter = serverListSimpleAdapter;
 		this.position = position;
 		this.context = context;
-		
-		bar = new ProgressDialog(this.context);
-		bar.setCancelable(true);
-		bar.setMessage(LicLiteData.LOGIN_IN_PROGRESS);
-		bar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		this.progress = progress;
 	}
 	
 	
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		bar.show();
 	}
 	
 	@Override
@@ -72,6 +67,7 @@ System.out.println("connection is --->  timeout is ----> " + connection + "  " +
 	@Override
 	protected void onPostExecute(Boolean result) {
 		super.onPostExecute(result);
+		progress.dismiss();
 		if(result.equals(true)){
 			//notify ServerListSimpleAdapter data set changed
 	    	ServerListSimpleAdapter.getMyData().get(position).put("item_server_pic", String.valueOf(R.drawable.server_login));   
@@ -82,8 +78,6 @@ System.out.println("connection is --->  timeout is ----> " + connection + "  " +
 		}else
 			UIUtil.showToast(context.getResources().getString(
 					R.string.login_failed),  context);
-
-		bar.dismiss();
 	}
 
 }

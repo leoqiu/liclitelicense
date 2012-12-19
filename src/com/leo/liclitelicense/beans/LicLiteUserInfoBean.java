@@ -44,8 +44,8 @@ public class LicLiteUserInfoBean {
 	public String toString(){
 		String str = "";
 		
-		str = "User name -> " + this.userName + " userServerName -> " + this.userServerName + 
-				" userStartTime -> " + userStartTime +" userNumOfLicenses ->" + this.userNumOfLicenses;
+		str = "User name: " + this.userName + "\nuserServerName: " + this.userServerName + 
+				"\nuserStartTime: " + userStartTime +"\nuserNumOfLicenses: " + this.userNumOfLicenses;
 		
 		return str;
 	}

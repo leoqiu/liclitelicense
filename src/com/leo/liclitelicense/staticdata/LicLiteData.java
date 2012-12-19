@@ -107,10 +107,12 @@ public final class LicLiteData {
 	public static int SCREEN_WIDTH = 0;
 	
 	//loading progress bar max length
-	public final static int LOADING_PROGRESS_MAX = 5;
-	public final static int LOADING_PROGRESS_INITIAL_TIME = 1;
-	public final static int LOADING_PROGRESS_PARSING_TIME = 2;
-	public final static int LOADING_PROGRESS_ITERATING_TIME = 2;
+	public final static int LOADING_PROGRESS_MAX = 6;
+	public final static int LOADING_PROGRESS_DOWNLOAD_DATA_FROM_SERVER_TIME = 2;
+	public final static int LOADING_PROGRESS_PARSING_TIME = 3;
+	public final static int LOADING_PROGRESS_ITERATING_TIME = 1;
+	public final static int PARSING_DATA = -199;
+	public final static int ITERATING_DATA = -200;
 }
 
 

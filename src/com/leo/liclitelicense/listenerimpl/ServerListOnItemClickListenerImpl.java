@@ -2,6 +2,7 @@ package com.leo.liclitelicense.listenerimpl;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -25,7 +26,8 @@ public class ServerListOnItemClickListenerImpl implements OnItemClickListener{
 	
 	private Activity activity = null;
 	private ServerListSimpleAdapter serverListSimpleAdapter = null;
-	
+	//login progress dialog
+	private ProgressDialog progress = null;
 	
 	public ServerListOnItemClickListenerImpl(Activity activity, ServerListSimpleAdapter serverListSimpleAdapter){
 		this.activity = activity;
@@ -43,7 +45,7 @@ public class ServerListOnItemClickListenerImpl implements OnItemClickListener{
 		 ServerBean serverBean = LicLiteData.serverBeanList.get(position);
 		 
 //TEMP...		 
-		 if(serverBean.getIsLogin() == LicLiteData.IS_LOGINED){
+		 if(serverBean.getIsLogin() != LicLiteData.IS_LOGINED){
 			 final String serverName = serverBean.getServerName();
 			 new AlertDialog.Builder(activity)
 			     .setIconAttribute(android.R.attr.alertDialogIcon)
@@ -63,8 +65,13 @@ public class ServerListOnItemClickListenerImpl implements OnItemClickListener{
 			    		 UIUtil.showToast(activity.getResources().getString(R.string.login_no_user_or_pwd), activity);
 			    	 }else{
 			    		 SshManager sshManager = new SshManager(serverName, userName, passWord);
+			    		 progress = new ProgressDialog(activity);
+			    		 progress.setCancelable(false);
+			    		 progress.setMessage(LicLiteData.LOGIN_IN_PROGRESS);
+			    		 progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			    		 progress.show();
 						 GetSshSessionAsyncTask getSshSessionAsyncTask = new GetSshSessionAsyncTask(
-								sshManager, serverListSimpleAdapter, clickedPos, activity);	 
+								sshManager, serverListSimpleAdapter, clickedPos, activity, progress);	 
 						 getSshSessionAsyncTask.execute();
 			
 			    	 }
@@ -97,7 +104,7 @@ System.out.println("login .........");
 //Intent intent = new Intent(activity, TempActivity.class);
 Intent intent = new Intent(activity, RenderInTimeResultActivity.class);
 intent.putExtra(LicLiteData.SERVER_LOGIN_INDEX, clickedPos);
-intent.putExtra(LicLiteData.IS_HISTORY_RESULT, false);
+//intent.putExtra(LicLiteData.IS_HISTORY_RESULT, false);
 activity.startActivity(intent);
 activity.overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 

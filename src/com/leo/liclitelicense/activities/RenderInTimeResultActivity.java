@@ -55,7 +55,7 @@ public class RenderInTimeResultActivity extends Activity {
 
 		//Progress dialog for loading data
 		progress = new ProgressDialog(this);
-		progress.setMessage("Loading and parsing data from server ...");
+		progress.setMessage("Downloading data from server ...");
 		progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progress.setMax(LicLiteData.LOADING_PROGRESS_MAX);
 		progress.show();
@@ -78,8 +78,11 @@ public class RenderInTimeResultActivity extends Activity {
 		this.switchActivity(0);
 		this.gridviewToolbar.setOnItemClickListener(new GridviewToolbarOnItemClickListenerImpl());
 
+		//get logined index from startgroup activity
+		int loginIndex = this.getIntent().getIntExtra(LicLiteData.SERVER_LOGIN_INDEX, -1);
+System.out.println("login at index -> " + loginIndex);		
 		RenderInTimeResultAsyncTask renderInTimeResultAsyncTask = new RenderInTimeResultAsyncTask(
-				renderServersWithoutUsersFragment, this.gridviewToolbar, progress);
+				renderServersWithoutUsersFragment, renderServersWithUsersFragment, this.gridviewToolbar, progress, loginIndex);
 		renderInTimeResultAsyncTask.execute();
 
 	}
