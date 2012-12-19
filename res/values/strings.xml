@@ -31,6 +31,9 @@
     <string name="alert_dialog_login_cancel_button">Cancel</string>
     <string name="login_successfully">login successfully!</string>
     <string name="login_failed">login failed, plz check network connection or if password is correct</string>
+    
+    <!-- list item onlongclick pop-up list menu strings-->
+    <string name="on_long_click_title">What do you want to do?</string>
 
 </resources>
 

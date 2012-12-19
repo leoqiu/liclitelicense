@@ -77,6 +77,21 @@ public class DBUtil {
 		lGeneralDBManager.close();
 	}
 	
+	/**
+	 * delete a specific row from table - servers
+	 * 
+	 * @param context
+	 * @param serverName
+	 * @param serverCmd
+	 */
+	public static void deleteServerFromDB(Context context, String serverName, String serverCmd){
+		lGeneralDBManager = new LGeneralDBManager(new LDBHelper(context, LicLiteData.GENERAL_DB));
+		if(lGeneralDBManager.delete(serverName, serverCmd) == 1){
+			//
+		}else{
+			//throw exception
+		}
+	}
 }
 
 

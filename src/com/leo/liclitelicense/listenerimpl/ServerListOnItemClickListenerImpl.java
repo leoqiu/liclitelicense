@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.leo.liclitelicense.R;
 import com.leo.liclitelicense.activities.RenderInTimeResultActivity;
+import com.leo.liclitelicense.activities.TempActivity;
 import com.leo.liclitelicense.adapters.ServerListSimpleAdapter;
 import com.leo.liclitelicense.asyncs.GetSshSessionAsyncTask;
 import com.leo.liclitelicense.beans.ServerBean;
@@ -41,8 +42,8 @@ public class ServerListOnItemClickListenerImpl implements OnItemClickListener{
 		 //get the server name for rendering on login dialog and for future conn use
 		 ServerBean serverBean = LicLiteData.serverBeanList.get(position);
 		 
-		 
-		 if(serverBean.getIsLogin() != LicLiteData.IS_LOGINED){
+//TEMP...		 
+		 if(serverBean.getIsLogin() == LicLiteData.IS_LOGINED){
 			 final String serverName = serverBean.getServerName();
 			 new AlertDialog.Builder(activity)
 			     .setIconAttribute(android.R.attr.alertDialogIcon)
@@ -93,6 +94,7 @@ System.out.println("login .........");
 //	transaction.commit();
 //TextView titleBar = (TextView) activity.findViewById(R.id.title_bar_value);
 //titleBar.setText("In time result");
+//Intent intent = new Intent(activity, TempActivity.class);
 Intent intent = new Intent(activity, RenderInTimeResultActivity.class);
 intent.putExtra(LicLiteData.SERVER_LOGIN_INDEX, clickedPos);
 intent.putExtra(LicLiteData.IS_HISTORY_RESULT, false);

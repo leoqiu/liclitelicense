@@ -1,5 +1,7 @@
 package com.leo.liclitelicense.activities;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,6 +28,7 @@ import com.leo.liclitelicense.fragments.HistoryFragment;
 import com.leo.liclitelicense.fragments.NotificationFragment;
 import com.leo.liclitelicense.fragments.ServersFragment;
 import com.leo.liclitelicense.staticdata.LicLiteData;
+import com.leo.liclitelicense.utils.UIUtil;
 
 
 
@@ -44,6 +48,19 @@ public class StartGroupActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         
     	super.onCreate(savedInstanceState);
+    	
+		//check sdcard storage
+		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+			
+			String mntSdcardDir = Environment.getExternalStorageDirectory().toString();
+			File dataDir = new File(mntSdcardDir + File.separator + LicLiteData.DIR);
+			if(!dataDir.exists() || (mntSdcardDir != null)){
+				dataDir.mkdir();
+			}
+			
+			LicLiteData.licLiteDataDir = mntSdcardDir + File.separator + LicLiteData.DIR;
+		}
+    	
 //      super.requestWindowFeature(Window.FEATURE_NO_TITLE); // no title
         //customize title bar
     	super.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
@@ -55,13 +72,14 @@ public class StartGroupActivity extends Activity {
  //       this.content = (TextView) this.findViewById(R.id.content);
         
         //gridview setups
-		this.gridviewToolbar.setNumColumns(this.group_img.length); // 求出可以保存的个数
+		this.gridviewToolbar.setNumColumns(this.group_img.length); // æ±‚å‡ºå�¯ä»¥ä¿�å­˜çš„ä¸ªæ•°
 		this.gridviewToolbar.setSelector(new ColorDrawable(Color.TRANSPARENT));
 		this.gridviewToolbar.setGravity(Gravity.CENTER);
 		this.gridviewToolbar.setVerticalSpacing(0);
 		
 		
 		this.screenWidth = super.getWindowManager().getDefaultDisplay().getWidth()/ this.group_img.length;
+		LicLiteData.SCREEN_WIDTH = this.screenWidth;
 		this.screenHeight = super.getWindowManager().getDefaultDisplay().getHeight() / 10 ;
 		
 		//set GroupActivityImageAdapter
@@ -71,7 +89,7 @@ public class StartGroupActivity extends Activity {
 		this.gridviewToolbar.setOnItemClickListener(new GridviewToolbarOnItemClickListenerImpl());
     }
 
-	private void switchActivity(int id) { // 切换选中的操作
+	private void switchActivity(int id) { // åˆ‡æ�¢é€‰ä¸­çš„æ“�ä½œ
 		// set background pic for selected fragment pic
 		this.groupFragmentImageAdapter.setFocus(id); 
 		
@@ -135,14 +153,21 @@ public class StartGroupActivity extends Activity {
 		}
 		
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		System.out.println("on destroy...");
+		
+	}
     
-//	@Override
-//	public boolean onKeyDown(int keyCode, KeyEvent event) {
-//		if(keyCode == KeyEvent.KEYCODE_BACK) {
-//			this.exitDialog() ;
-//		}
-//		return false ;
-//	}
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			this.exitDialog() ;
+		}
+		return false ;
+	}
 	
 	/**
 	 * 
@@ -153,9 +178,7 @@ public class StartGroupActivity extends Activity {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-LicLiteData.serverBeanList.clear();
-LicLiteData.autoServerNameSet.clear();
-LicLiteData.autoLmgrdCmdSet.clear();
+						UIUtil.dispose();
 						StartGroupActivity.this.finish() ;
 					}
 				})

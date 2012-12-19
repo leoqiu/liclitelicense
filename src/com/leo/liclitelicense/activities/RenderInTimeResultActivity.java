@@ -1,16 +1,45 @@
 package com.leo.liclitelicense.activities;
 
+
 import android.app.Activity;
-import android.content.Intent;
+import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+
 import com.leo.liclitelicense.R;
+import com.leo.liclitelicense.adapters.GroupFragmentImageAdapter;
 import com.leo.liclitelicense.asyncs.RenderInTimeResultAsyncTask;
+import com.leo.liclitelicense.fragments.RenderServersWithUsersFragment;
+import com.leo.liclitelicense.fragments.RenderServersWithoutUsersFragment;
 import com.leo.liclitelicense.staticdata.LicLiteData;
 
 public class RenderInTimeResultActivity extends Activity {
 
+	private GridView gridviewToolbar; // group grid tool bar
+	private GroupFragmentImageAdapter groupFragmentImageAdapter = null; // picture adapter
+	
+	// groupActivityImageAdapter images resources
+	private int group_img[] = new int[] { R.drawable.render_no_user, R.drawable.render_has_user};
+	private int screenWidth = 0; // screen width
+	private int screenHeight = 0; // screen height
+	
+	private TextView titleBar = null;
+	
+	//two fragments
+	private RenderServersWithoutUsersFragment renderServersWithoutUsersFragment = RenderServersWithoutUsersFragment.getInstance();
+	private RenderServersWithUsersFragment renderServersWithUsersFragment = RenderServersWithUsersFragment.getInstance();
+	
+	//loading progress dialog
+	private ProgressDialog progress = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -19,27 +48,97 @@ public class RenderInTimeResultActivity extends Activity {
 		// set window feature then can use custom title bar
 		super.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		this.setContentView(R.layout.activity_render_in_time_result);
-
 		this.getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
 				R.layout.activity_group_title_bar);
+		titleBar = (TextView) this.findViewById(R.id.title_bar_value);
+		titleBar.setText("TEST TEST TEST");
 
-		TextView titleBar = (TextView) this.findViewById(R.id.title_bar_value);
+		//Progress dialog for loading data
+		progress = new ProgressDialog(this);
+		progress.setMessage("Loading and parsing data from server ...");
+		progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		progress.setMax(LicLiteData.LOADING_PROGRESS_MAX);
+		progress.show();
+		
+		this.gridviewToolbar = (GridView) this.findViewById(R.id.gridviewbar_render_result);
+		this.gridviewToolbar.setNumColumns(this.group_img.length);
+		this.gridviewToolbar.setSelector(new ColorDrawable(Color.TRANSPARENT));
+		this.gridviewToolbar.setGravity(Gravity.CENTER);
+		this.gridviewToolbar.setVerticalSpacing(0);
+		this.gridviewToolbar.setVisibility(View.INVISIBLE);
+		
+		//set gridview length and width
+		this.screenWidth = super.getWindowManager().getDefaultDisplay().getWidth()/ this.group_img.length;
+		LicLiteData.SCREEN_WIDTH = this.screenWidth;
+		this.screenHeight = super.getWindowManager().getDefaultDisplay().getHeight() / 10 ;
 
-		titleBar.setText("Server results");
-
-		Intent intent = this.getIntent();
-
-		int loginIndex = intent.getIntExtra(LicLiteData.SERVER_LOGIN_INDEX, 1);
-
-		System.out.println("clcik on " + loginIndex);
+		//set GroupActivityImageAdapter
+		groupFragmentImageAdapter = new GroupFragmentImageAdapter(this, group_img, screenWidth, screenHeight, R.drawable.group_selected);
+		this.gridviewToolbar.setAdapter(groupFragmentImageAdapter);
+		this.switchActivity(0);
+		this.gridviewToolbar.setOnItemClickListener(new GridviewToolbarOnItemClickListenerImpl());
 
 		RenderInTimeResultAsyncTask renderInTimeResultAsyncTask = new RenderInTimeResultAsyncTask(
-				loginIndex, RenderInTimeResultActivity.this);
-
+				renderServersWithoutUsersFragment, this.gridviewToolbar, progress);
 		renderInTimeResultAsyncTask.execute();
 
 	}
 
+	
+	private void switchActivity(int id) {
+		// set background pic for selected fragment pic
+		this.groupFragmentImageAdapter.setFocus(id); 
+		
+		switch (id) {
+		case 0:
+			replaceFragment(id);
+			break;
+		case 1:
+			replaceFragment(id);
+			break;
+		}		
+	}
+	
+	
+	private void replaceFragment(int position){
+		
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.setCustomAnimations(R.animator.fragment_slide_left_enter,
+                R.animator.fragment_slide_left_exit,
+                R.animator.fragment_slide_right_enter,
+                R.animator.fragment_slide_right_exit);
+		if(position == 0) {
+			transaction.replace(R.id.render_result_content, renderServersWithoutUsersFragment);
+			titleBar.setText("servers avaliable with no user occupied");
+		}else if(position == 1){
+			transaction.replace(R.id.render_result_content, renderServersWithUsersFragment);
+			titleBar.setText("servers avaliable with users occupied");
+		}
+
+//		transaction.addToBackStack(null);
+		if(transaction != null)
+			transaction.commit();
+		
+	}
+	
+	
+	/**
+	 * 
+	 * @author shqiu
+	 *
+	 */
+	private class GridviewToolbarOnItemClickListenerImpl implements OnItemClickListener {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			
+			switchActivity(position);
+			
+		}
+		
+	}
+	
 	/**
 	 * 
 	 * animation when press the back button
@@ -53,6 +152,25 @@ public class RenderInTimeResultActivity extends Activity {
 		overridePendingTransition(android.R.anim.slide_in_left,
 				android.R.anim.slide_out_right);
 
+	}
+	
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+//		this.renderServersWithoutUsersFragment.setLicliteWithoutAdapterList(null);
+		this.renderServersWithoutUsersFragment.setSimplerAdapterHasNoUsers(null);
+		this.renderServersWithoutUsersFragment = null;
+System.out.println("render act on destroy ....");
+	}
+
+
+	@Override
+	public void onDetachedFromWindow() {
+		// TODO Auto-generated method stub
+		super.onDetachedFromWindow();
+System.out.println("render act on detached from window...");
 	}
 
 }

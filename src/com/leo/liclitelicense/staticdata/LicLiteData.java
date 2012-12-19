@@ -44,7 +44,6 @@ public final class LicLiteData {
 	
 	//for app data write and read
 	public static final String BASE_DIR = "/data/data/com.leo.licsenselitev3";
-	public static final String DIR = "licsenselitev3";
 	
 	//server history related
 	public final static String SERVER_INDEX = "serverIndex";
@@ -94,6 +93,24 @@ public final class LicLiteData {
 	public final static String TABLE_AUTO_WORD = "auto_word";
 	public final static String AUTO_SERVER_NAME = "auto_server_name";
 	public final static String AUTO_SERVER_CMD = "auto_server_cmd";
+	
+	//loading in time results
+	public static String licLiteDataDir = null;
+	public static final String DIR = "liclitedata";
+	
+	
+	//performance timer
+	public static int startTime = 0;
+	public static int endTime = 0;
+
+	//for autocomplete text view dropdown list width
+	public static int SCREEN_WIDTH = 0;
+	
+	//loading progress bar max length
+	public final static int LOADING_PROGRESS_MAX = 5;
+	public final static int LOADING_PROGRESS_INITIAL_TIME = 1;
+	public final static int LOADING_PROGRESS_PARSING_TIME = 2;
+	public final static int LOADING_PROGRESS_ITERATING_TIME = 2;
 }
 
 

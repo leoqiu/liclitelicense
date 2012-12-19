@@ -133,8 +133,9 @@ public class LGeneralDBManager {
 	 * 
 	 * @param serverName
 	 */
-	public void delete(String serverName){
-		dbWritable.delete("servers", "serverName=?", new String[]{serverName});
+	public int delete(String serverName, String serverCmd){
+		return dbWritable.delete("servers", LicLiteData.SERVER_NAME+"=? AND " + LicLiteData.SERVER_CMD + "=?"
+				, new String[]{serverName, serverCmd});
 	}
 	
 	public ArrayList<AutoWordBean> queryAutoWordBean(String tableAutoWord){

@@ -30,6 +30,19 @@ public class ServerListSimpleAdapter extends SimpleAdapter{
 		ServerListSimpleAdapter.myData = myData;
 	}
 	
+	public static void updateMyData(int pos){
+		ServerListSimpleAdapter.myData.remove(pos);
+	}
+	
+	@Override
+	public int getCount() {
+		return myData.size();
+	}
+
+	@Override
+	public void notifyDataSetChanged() {
+		super.notifyDataSetChanged();
+	}
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {

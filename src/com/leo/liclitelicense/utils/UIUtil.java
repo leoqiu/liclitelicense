@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.widget.Toast;
 import ch.ethz.ssh2.Connection;
 
+import com.leo.liclitelicense.R;
+import com.leo.liclitelicense.adapters.ServerListSimpleAdapter;
 import com.leo.liclitelicense.beans.ServerBean;
 import com.leo.liclitelicense.staticdata.LicLiteData;
 
@@ -40,38 +42,47 @@ public class UIUtil{
 	 * 
 	 * @param position
 	 */
-//	public static void logOutTheServer(int position){
-//		ServerBean serverBean = LicLiteData.serverBeanList.get(position);
-//		serverBean.setIsLogin(LicLiteData.IS_NOT_LOGINED);
-//		serverBean.getConnection().close();
-//		serverBean.setConnection(null);
-//	}
+	public static void logOutTheServer(int position, ServerListSimpleAdapter serverListSimpleAdapter){
+		ServerBean serverBean = LicLiteData.serverBeanList.get(position);
+		serverBean.setIsLogin(LicLiteData.IS_NOT_LOGINED);
+		serverBean.getConnection().close();
+		serverBean.setConnection(null);
+		
+		//notify ServerListSimpleAdapter data set changed
+		ServerListSimpleAdapter
+				.getMyData()
+				.get(position)
+				.put("item_server_pic", String.valueOf(R.drawable.server_not_login));
+    	serverListSimpleAdapter.notifyDataSetChanged();
+	}
 	
 	/**
 	 * close all the ssh connections and
 	 * clear LicLiteData.serverBeanList
 	 * 
 	 */
-//	public static void dispose(Context context){
-//		//stop service
-//		
-//		
-//		int size = LicLiteData.serverBeanList.size();
-//		Connection connection;
-//		ServerBean serverBean;
-//		for(int i = 0; i < size; i++){
-//			serverBean = LicLiteData.serverBeanList.get(i);
-//			connection = serverBean.getConnection();
-//			if(connection != null){
-//				//isLogin control the service runnable
-//				serverBean.setIsLogin(LicLiteData.IS_NOT_LOGINED);
-//				serverBean.getConnection().close();
-//				serverBean.setConnection(null);
-//			}
-//		}
-//		LicLiteData.serverBeanList.clear();
+	public static void dispose(){
+		//stop service
+		
+		
+		int size = LicLiteData.serverBeanList.size();
+		Connection connection;
+		ServerBean serverBean;
+		for(int i = 0; i < size; i++){
+			serverBean = LicLiteData.serverBeanList.get(i);
+			connection = serverBean.getConnection();
+			if(connection != null){
+				//isLogin control the service runnable
+				serverBean.setIsLogin(LicLiteData.IS_NOT_LOGINED);
+				serverBean.getConnection().close();
+				serverBean.setConnection(null);
+			}
+		}
+		LicLiteData.serverBeanList.clear();
+		LicLiteData.autoServerNameSet.clear();
+		LicLiteData.autoLmgrdCmdSet.clear();
 //		stopAService(context);
-//	}
+	}
 	
 	/**
 	 * 
