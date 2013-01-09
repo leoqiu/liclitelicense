@@ -34,14 +34,14 @@ public class Parser {
 	 * 
 	 * @return
 	 */
-	public static List<LicLiteServerInfoBean> parseDownloadDataFile(){
+	public static List<LicLiteServerInfoBean> parseDownloadDataFile(String fileName){
 		List<LicLiteServerInfoBean> licliteServerInfoList = new ArrayList<LicLiteServerInfoBean>();
 		LicLiteData.startTime = (int) (System.currentTimeMillis() / 1000);
 		//NetWorkUtil.executeCmd(conn, cmd4);
 //NetWorkUtil.executeSCPCmd(conn, cmd6);
 		
 		//local sdcard data file
-		String licliteData = LicLiteData.licLiteDataDir + File.separator + "one_server_temp.log";
+		String licliteData = LicLiteData.licLiteDataDir + File.separator + fileName;
 		File licLocalFile = new File(licliteData);		
 		FileReader reader = null;		
 		String line = null;		

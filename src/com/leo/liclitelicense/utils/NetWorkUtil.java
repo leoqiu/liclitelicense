@@ -78,6 +78,46 @@ public class NetWorkUtil {
 		return outputStrArr;
 	}
 	
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param connection
+	 * @param cmd
+	 * @return
+	 */
+	private static String getserverDataFileName(Connection connection){
+		String serverDataFileName = null;
+		Session session = null;
+		
+        try {
+        	session = connection.openSession();
+        	session.execCommand(LicLiteData.CMD_GET_OUT_PUT_FILE_NAME);
+        	
+	        InputStream stdout = new StreamGobbler(session.getStdout());
+	        InputStreamReader insrout=new InputStreamReader(stdout);
+	        BufferedReader stdoutReader = new BufferedReader(insrout);
+
+
+
+	        String line = stdoutReader.readLine();
+	        if (line == null)
+	        {
+	        	serverDataFileName = line;
+	        } 
+	        stdoutReader.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+        //close session and assign session null, for GC to collection it
+        session.close();
+        session = null;
+		
+		return serverDataFileName;
+	}
+	
 	public static void executeCmd(Connection connection, String cmd){
 		Session session = null;
         try {
@@ -102,13 +142,21 @@ public class NetWorkUtil {
 	 */
 	public static void executeSCPCmd(Connection connection, String cmd){
 		Session session = null;
+		Session session2 = null;
+		
 		SCPClient scp = null;
         try {
         	session = connection.openSession();
         	session.execCommand(cmd);
-        	scp = connection.createSCPClient();
-        	scp.get("/home/leo/Desktop/log/one_server_temp.log", LicLiteData.licLiteDataDir);
         	
+//System.out.println("fileName -> " + getserverDataFileName(connection));
+//System.out.println("cmd - "  +cmd);	
+        	
+        	scp = connection.createSCPClient();
+        	scp.get("/home/leo/Desktop/log/licliteserver-*", LicLiteData.licLiteDataDir);
+        	session2 = connection.openSession();
+        	session2.execCommand("rm /home/leo/Desktop/log/licliteserver-*");
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -117,5 +165,9 @@ public class NetWorkUtil {
         //close session and assign session null, for GC to collection it
         session.close();
         session = null;
+        session2.close();
+        session2 = null;
 	}
 }
+
+

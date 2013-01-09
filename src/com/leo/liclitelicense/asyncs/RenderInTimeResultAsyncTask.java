@@ -1,5 +1,6 @@
 package com.leo.liclitelicense.asyncs;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,20 +81,21 @@ public class RenderInTimeResultAsyncTask extends AsyncTask<Object, Integer, Stri
 
 	@Override
 	protected void onPreExecute() {
-
+		
 	}
 
 	@Override
 	protected String doInBackground(Object... params) {
-		
+
 		//download raw data from server
 		ServerBean serverBean = LicLiteData.serverBeanList.get(loginIndex);
 		NetWorkUtil.executeSCPCmd(serverBean.getConnection(), serverBean.getServerCmd());
 		this.publishProgress(LicLiteData.LOADING_PROGRESS_DOWNLOAD_DATA_FROM_SERVER_TIME);
-		
+
+System.out.println("Latest file name is: " + getLatestFileName());
 		//parsing data locally
 		this.publishProgress(LicLiteData.PARSING_DATA);
-		List<LicLiteServerInfoBean> licliteServerInfoList = Parser.parseDownloadDataFile();
+		List<LicLiteServerInfoBean> licliteServerInfoList = Parser.parseDownloadDataFile(getLatestFileName());
 		this.publishProgress(LicLiteData.LOADING_PROGRESS_PARSING_TIME);
 
 		//iterating data locally
@@ -177,4 +179,21 @@ System.out.println("time cost is ----> "
 	}
 
 
+	/**
+	 * Get latest liclite data file name for parsing
+	 * 
+	 * @return
+	 */
+	private String getLatestFileName(){
+		File folder = new File(LicLiteData.licLiteDataDir);
+		File[] listOfFiles = folder.listFiles();  
+		
+		return listOfFiles[listOfFiles.length - 1].getName();
+		
+	}
+	
+	
 }
+
+
+

@@ -113,6 +113,9 @@ public final class LicLiteData {
 	public final static int LOADING_PROGRESS_ITERATING_TIME = 1;
 	public final static int PARSING_DATA = -199;
 	public final static int ITERATING_DATA = -200;
+	
+	//cmd
+	public final static String CMD_GET_OUT_PUT_FILE_NAME = "ls /home/leo/Desktop/log -a | grep licliteserver-*";
 }
 
 
