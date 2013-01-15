@@ -7,14 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.leo.liclitelicense.R;
-
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
-import android.os.Environment;
-import android.view.View;
-import android.widget.GridView;
-import android.widget.SimpleAdapter;
-
 import com.leo.liclitelicense.beans.LicLiteServerInfoBean;
 import com.leo.liclitelicense.beans.ServerBean;
 import com.leo.liclitelicense.fragments.RenderServersWithUsersFragment;
@@ -23,21 +15,14 @@ import com.leo.liclitelicense.staticdata.LicLiteData;
 import com.leo.liclitelicense.utils.NetWorkUtil;
 import com.leo.liclitelicense.utils.Parser;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.view.View;
+import android.widget.GridView;
+import android.widget.SimpleAdapter;
 
-/**
- * AsyncTask<Param, Param, Param>
- * 
- * #1. param passed into doInBackground
- * #2. param passed into onProgressUpdate
- * #3. param returned by doInBackground
- * 
- * #4  onProgressUpdate(Integer... values), pass a Integer array
- * @author shqiu
- *
- */
-
-public class RenderInTimeResultAsyncTask extends AsyncTask<Object, Integer, String> {
-	
+public class RenderLocalResultAsyncTask extends AsyncTask<Object, Integer, String> {
 	private ProgressDialog progress = null;
 	@Override
 	protected void onProgressUpdate(Integer... values) {
@@ -59,7 +44,7 @@ public class RenderInTimeResultAsyncTask extends AsyncTask<Object, Integer, Stri
 	private RenderServersWithoutUsersFragment renderServersWithoutUsersFragment = null;
 	private RenderServersWithUsersFragment renderServersWithUsersFragment = null;
 	private GridView gridviewToolbar = null;
-	private int loginIndex = -1;
+	private String dataFileName = null;
 	
 	// simpler adapter list
 	List<Map<String, String>> licliteWithoutAdapterList = new ArrayList<Map<String, String>>();
@@ -68,46 +53,28 @@ public class RenderInTimeResultAsyncTask extends AsyncTask<Object, Integer, Stri
 	List<Map<String, Object>> licliteWithAdapterList = new ArrayList<Map<String, Object>>();
 	
 	
-	public RenderInTimeResultAsyncTask(RenderServersWithoutUsersFragment 
+	public RenderLocalResultAsyncTask(RenderServersWithoutUsersFragment 
 			renderServersWithoutUsersFragment, RenderServersWithUsersFragment renderServersWithUsersFragment,
-			GridView gridviewToolbar, ProgressDialog progress, int loginIndex) {
+			GridView gridviewToolbar, ProgressDialog progress, String dataFileName) {
 		
 		this.renderServersWithoutUsersFragment = renderServersWithoutUsersFragment;
 		this.renderServersWithUsersFragment = renderServersWithUsersFragment;
 		this.gridviewToolbar = gridviewToolbar;
 		this.progress = progress;
-		this.loginIndex = loginIndex;
+		this.dataFileName = dataFileName;
 	}
 
 	@Override
 	protected void onPreExecute() {
-		
+		progress.setMax(LicLiteData.LOADING_PROGRESS_LOCAL_MAX);
 	}
 
 	@Override
 	protected String doInBackground(Object... params) {
 
-		//download raw data from server
-		ServerBean serverBean = LicLiteData.serverBeanList.get(loginIndex);
-		
-		//check if LicLiteData.licLiteDataDir exists if not create one accordingly
-		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-			LicLiteData.licLiteDataDir = Environment.getExternalStorageDirectory().toString()
-					+ File.separator + LicLiteData.DIR;
-			File licliteDataDir = new File(LicLiteData.licLiteDataDir);		
-			if(!licliteDataDir.exists()){
-				licliteDataDir.mkdirs();
-System.out.println("create data folder...");
-			}
-		}
-		
-		NetWorkUtil.executeSCPCmd(serverBean.getConnection(), serverBean.getServerCmd());
-		this.publishProgress(LicLiteData.LOADING_PROGRESS_DOWNLOAD_DATA_FROM_SERVER_TIME);
-
-System.out.println("Latest file name is: " + getLatestFileName());
 		//parsing data locally
 		this.publishProgress(LicLiteData.PARSING_DATA);
-		List<LicLiteServerInfoBean> licliteServerInfoList = Parser.parseDownloadDataFile(getLatestFileName());
+		List<LicLiteServerInfoBean> licliteServerInfoList = Parser.parseDownloadDataFile(dataFileName);
 		this.publishProgress(LicLiteData.LOADING_PROGRESS_PARSING_TIME);
 
 		//iterating data locally
@@ -140,12 +107,6 @@ System.out.println("Latest file name is: " + getLatestFileName());
 			}
 		}
 		this.publishProgress(LicLiteData.LOADING_PROGRESS_ITERATING_TIME);
-		
-//		System.out.println("how many without items -> "
-//				+ licliteWithoutAdapterList.size());
-//		System.out.println("how many with items -> "
-//				+ licliteWithGroupAdapterList.size());
-//		System.out.println("how many items -> " + licliteServerInfoList.size());
 
 		return null;
 	}
@@ -203,9 +164,4 @@ System.out.println("time cost is ----> "
 		return listOfFiles[listOfFiles.length - 1].getName();
 		
 	}
-	
-	
 }
-
-
-

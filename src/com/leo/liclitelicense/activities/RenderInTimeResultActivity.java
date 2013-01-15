@@ -18,6 +18,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.leo.liclitelicense.R;
 import com.leo.liclitelicense.adapters.GroupFragmentImageAdapter;
 import com.leo.liclitelicense.asyncs.RenderInTimeResultAsyncTask;
+import com.leo.liclitelicense.asyncs.RenderLocalResultAsyncTask;
 import com.leo.liclitelicense.fragments.RenderServersWithUsersFragment;
 import com.leo.liclitelicense.fragments.RenderServersWithoutUsersFragment;
 import com.leo.liclitelicense.staticdata.LicLiteData;
@@ -80,10 +81,22 @@ public class RenderInTimeResultActivity extends Activity {
 
 		//get logined index from startgroup activity
 		int loginIndex = this.getIntent().getIntExtra(LicLiteData.SERVER_LOGIN_INDEX, -1);
-System.out.println("login at index -> " + loginIndex);		
-		RenderInTimeResultAsyncTask renderInTimeResultAsyncTask = new RenderInTimeResultAsyncTask(
-				renderServersWithoutUsersFragment, renderServersWithUsersFragment, this.gridviewToolbar, progress, loginIndex);
-		renderInTimeResultAsyncTask.execute();
+		int resultType = this.getIntent().getIntExtra(LicLiteData.RESULT_FLAG, -1);
+		String dataFileName = this.getIntent().getStringExtra(LicLiteData.LOCAL_DATA_FILE_NAME);
+		
+
+		
+		if(resultType == LicLiteData.IN_TIME_RESULT){
+			RenderInTimeResultAsyncTask renderInTimeResultAsyncTask = new RenderInTimeResultAsyncTask(
+					renderServersWithoutUsersFragment, renderServersWithUsersFragment, this.gridviewToolbar, progress, loginIndex);
+			renderInTimeResultAsyncTask.execute();
+		}else if(resultType == LicLiteData.LOCAL_RESULT){
+			RenderLocalResultAsyncTask renderLocalResultAsyncTask = new RenderLocalResultAsyncTask(
+					renderServersWithoutUsersFragment, renderServersWithUsersFragment, this.gridviewToolbar, progress, dataFileName);
+			renderLocalResultAsyncTask.execute();
+		}
+
+
 
 	}
 

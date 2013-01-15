@@ -6,10 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.leo.liclitelicense.R;
+import com.leo.liclitelicense.activities.RenderInTimeResultActivity;
 import com.leo.liclitelicense.beans.HistoryBean;
 import com.leo.liclitelicense.staticdata.LicLiteData;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +25,7 @@ import android.widget.SimpleAdapter;
 
 public class HistoryFragment extends Fragment {
 
+	private Activity activity = null;
 	
 	private static HistoryFragment instance = new HistoryFragment();
 	
@@ -44,6 +48,7 @@ public class HistoryFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		activity = this.getActivity();
 		
 		View v = inflater.inflate(R.layout.fragment_history, container, false);
 		this.historyList = (ListView) v.findViewById(R.id.list_history);
@@ -83,6 +88,13 @@ System.out.println("how many history -> " + historyInfoListOfMapForSimpleAdapter
 		public void onItemClick(AdapterView<?> adapterView, View view, int position,
 				long id) {
 			System.out.println("click on --> " + historyBeanList.get(position).getFileName());
+System.out.println("activity --> " + activity);
+			Intent intent = new Intent(activity, RenderInTimeResultActivity.class);
+			intent.putExtra(LicLiteData.LOCAL_DATA_FILE_NAME, historyBeanList.get(position).getFileName());
+			//get in time result locally
+			intent.putExtra(LicLiteData.RESULT_FLAG, LicLiteData.LOCAL_RESULT);
+			activity.startActivity(intent);
+			activity.overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 		}
 		
 	} 
@@ -94,11 +106,20 @@ System.out.println("how many history -> " + historyInfoListOfMapForSimpleAdapter
 	 * @return
 	 */
 	private ArrayList<HistoryBean> getHistoryBeanList(){
+		ArrayList<HistoryBean> historyBeans = new ArrayList<HistoryBean>();
+System.out.println("historyBeans size is -> " + historyBeans.size());		
+		
+		
 		File folder = new File(LicLiteData.licLiteDataDir);
+		if(!folder.exists()){
+			folder.mkdirs();
+		}
+
+		
 		File[] listOfFiles = folder.listFiles(); 
 		int lastIndex = listOfFiles.length - 1;
 
-		ArrayList<HistoryBean> historyBeans = new ArrayList<HistoryBean>();
+		
 		String timeStamp = null;
 		
 		for(int i = lastIndex ; i >= 0; i-- ){
@@ -109,7 +130,7 @@ System.out.println("how many history -> " + historyInfoListOfMapForSimpleAdapter
 			HistoryBean bean = new HistoryBean("WHICH LMGRD SERVER???", timeStamp, fileName);
 			historyBeans.add(bean);
 		}
-		
+System.out.println("historyBeans size is -> " + historyBeans.size());		
 		return historyBeans;
 	}
 

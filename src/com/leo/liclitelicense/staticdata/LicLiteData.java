@@ -108,6 +108,7 @@ public final class LicLiteData {
 	
 	//loading progress bar max length
 	public final static int LOADING_PROGRESS_MAX = 6;
+	public final static int LOADING_PROGRESS_LOCAL_MAX = 4;
 	public final static int LOADING_PROGRESS_DOWNLOAD_DATA_FROM_SERVER_TIME = 2;
 	public final static int LOADING_PROGRESS_PARSING_TIME = 3;
 	public final static int LOADING_PROGRESS_ITERATING_TIME = 1;
@@ -116,6 +117,14 @@ public final class LicLiteData {
 	
 	//cmd
 	public final static String CMD_GET_OUT_PUT_FILE_NAME = "ls /home/leo/Desktop/log -a | grep licliteserver-*";
+	
+	//loading data file remotely and locally
+	public final static String RESULT_FLAG = "result_flag";
+	public final static String LOCAL_DATA_FILE_NAME = "local_data_file_name";
+	public final static int IN_TIME_RESULT = 0;
+	public final static int LOCAL_RESULT = 1;
+	
+	public final static int CONNECTION_AVALIABILITY_TIMEOUT = 10;
 }
 
 

@@ -104,6 +104,8 @@ System.out.println("login .........");
 //Intent intent = new Intent(activity, TempActivity.class);
 Intent intent = new Intent(activity, RenderInTimeResultActivity.class);
 intent.putExtra(LicLiteData.SERVER_LOGIN_INDEX, clickedPos);
+//get in time result from server
+intent.putExtra(LicLiteData.RESULT_FLAG, LicLiteData.IN_TIME_RESULT);
 //intent.putExtra(LicLiteData.IS_HISTORY_RESULT, false);
 activity.startActivity(intent);
 activity.overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);

@@ -1,9 +1,5 @@
 package com.leo.liclitelicense.fragments;
 
-
-import java.util.HashMap;
-import java.util.Map;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
