@@ -91,16 +91,18 @@ public class RenderInTimeResultAsyncTask extends AsyncTask<Object, Integer, Stri
 		ServerBean serverBean = LicLiteData.serverBeanList.get(loginIndex);
 		
 		//check if LicLiteData.licLiteDataDir exists if not create one accordingly
-		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-			LicLiteData.licLiteDataDir = Environment.getExternalStorageDirectory().toString()
-					+ File.separator + LicLiteData.DIR;
-			File licliteDataDir = new File(LicLiteData.licLiteDataDir);		
-			if(!licliteDataDir.exists()){
-				licliteDataDir.mkdirs();
-System.out.println("create data folder...");
-			}
-		}
-		
+//		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+//			LicLiteData.licLiteDataDir = Environment.getExternalStorageDirectory().toString()
+//					+ File.separator + LicLiteData.DIR;
+//			File licliteDataDir = new File(LicLiteData.licLiteDataDir);		
+//			if(!licliteDataDir.exists()){
+//				licliteDataDir.mkdirs();
+//System.out.println("create data folder...");
+//			}
+//		}
+
+System.out.println("serverBean.getConnection(), serverBean.getServerCmd() --> " 
++ serverBean.getConnection() + "   " + serverBean.getServerCmd());		
 		NetWorkUtil.executeSCPCmd(serverBean.getConnection(), serverBean.getServerCmd());
 		this.publishProgress(LicLiteData.LOADING_PROGRESS_DOWNLOAD_DATA_FROM_SERVER_TIME);
 

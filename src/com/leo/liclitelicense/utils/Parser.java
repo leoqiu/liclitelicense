@@ -45,7 +45,7 @@ public class Parser {
 		File licLocalFile = new File(licliteData);		
 		FileReader reader = null;		
 		String line = null;		
-		
+System.out.println("licliteData --> " + licliteData + " local file exist --> " + licLocalFile.exists());		
 		LicLiteServerInfoBean licLiteServerInfoBean = null;
 		LicLiteUserInfoBean licLiteUserInfoBean = null;
 		int featureAccount = 0;
@@ -57,6 +57,7 @@ public class Parser {
 				BufferedReader bf = new BufferedReader(reader);
 				while((line = bf.readLine()) != null){
 					line = line.trim();
+
 					if(!line.isEmpty()){
 	
 						if(line.contains("Users of ")){

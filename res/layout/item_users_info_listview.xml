@@ -14,6 +14,7 @@
 	        android:id="@+id/user_name_value"
 	        android:layout_width="wrap_content"
 	        android:textColor="#DF0101"
+	        android:layout_weight="1"
 	        android:layout_height="wrap_content" />
 	</TableRow>
 
@@ -28,6 +29,7 @@
 	        android:id="@+id/user_server_value"
 	        android:layout_width="wrap_content"
 	        android:textColor="#DF0101"
+	        android:layout_weight="1"
 	        android:layout_height="wrap_content" />
 	</TableRow>
 	
@@ -42,6 +44,7 @@
 	        android:id="@+id/user_start_time_value"
 	        android:layout_width="wrap_content"
 	        android:textColor="#DF0101"
+	        android:layout_weight="1"
 	        android:layout_height="wrap_content" />
 	</TableRow>
 	
@@ -56,6 +59,7 @@
 	        android:id="@+id/user_num_license_in_used_value"
 	        android:layout_width="wrap_content"
 	        android:textColor="#DF0101"
+	        android:layout_weight="1"
 	        android:layout_height="wrap_content" />
 	</TableRow>
     

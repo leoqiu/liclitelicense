@@ -1,7 +1,12 @@
 package com.leo.liclitelicense.utils;
 
+import java.io.File;
+import java.text.DecimalFormat;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.widget.Toast;
 import ch.ethz.ssh2.Connection;
 
@@ -114,4 +119,72 @@ public class UIUtil{
 //		
 //		return isExist;
 //	}
+	
+	
+    /**
+     * This is a recursive method.
+     * If file is found, total file size is calculated.
+     * If it is a folder, we recurse further.
+     */
+    public static double getFileSize(File folder) {
+    	
+    	DecimalFormat fmt =new DecimalFormat("#.##");
+    	
+        long fileSizeByte = 0;
+ 
+        File[] filelist = folder.listFiles();
+        for (int i = 0; i < filelist.length; i++) {
+            if (filelist[i].isDirectory()) {
+            	fileSizeByte += getFileSize(filelist[i]);
+            } else {
+            	fileSizeByte += filelist[i].length();
+            }
+        }
+        
+        double fileSizeMB=Double.valueOf(fmt.format(fileSizeByte /(1024*1024)));
+ 
+        return fileSizeMB;
+    }
+    
+    /**
+     * 
+     * @param activity
+     */
+    
+	public static void listAllFileNames(){
+		File folder = new File(LicLiteData.licLiteDataDir);
+		File[] listOfFiles = folder.listFiles();  
+		int size = listOfFiles.length;
+		
+		
+		for(int i = 0; i < size; i ++){
+			System.out.println("file name --> " + listOfFiles[i]);
+		}
+		
+		for(int j = 0; j < LicLiteData.NUMBER_DATA_FILE_TO_BE_DELETE; j++){
+			System.out.println("file deleted-> " + listOfFiles[j].delete());
+		}
+		
+	}
+	
+	public static void createDataDir(Activity activity){
+		//check if LicLiteData.licLiteDataDir exists if not create one accordingly
+System.out.println("hahahah --->  "+activity.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS));
+		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+System.out.println("sdcard mounted....");
+			LicLiteData.licLiteDataDir = Environment.getExternalStorageDirectory().toString()
+					+ File.separator + LicLiteData.DIR;
+			File licliteDataDir = new File(LicLiteData.licLiteDataDir);		
+			if(!licliteDataDir.exists()){
+				licliteDataDir.mkdirs();
+System.out.println("create data folder...");
+			}
+		}
+		
+System.out.println("sdcard unmounted....");
+	}
+	
 }
+
+
+

@@ -124,7 +124,11 @@ public final class LicLiteData {
 	public final static int IN_TIME_RESULT = 0;
 	public final static int LOCAL_RESULT = 1;
 	
-	public final static int CONNECTION_AVALIABILITY_TIMEOUT = 10;
+	public final static int CONNECTION_AVALIABILITY_TIMEOUT = 120;
+	
+	//data size management
+	public final static double DATA_SIZE_UPPPER_LIMIT = 1.0;
+	public final static int NUMBER_DATA_FILE_TO_BE_DELETE = 5;
 }
 
 

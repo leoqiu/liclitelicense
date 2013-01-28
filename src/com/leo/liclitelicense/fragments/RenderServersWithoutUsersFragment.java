@@ -54,6 +54,7 @@ public class RenderServersWithoutUsersFragment extends Fragment{
 				.setOnItemClickListener(new AutoCompleteWithoutUsersOnItemClickListenerImpl());
 		this.autoCompleteTextViewWithoutUsers.setDropDownWidth(0);
 		this.autoCompleteTextViewWithoutUsers.setHint("search by feature name");
+		this.autoCompleteTextViewWithoutUsers.setSelected(false);
 		
 		if(this.simplerAdapterHasNoUsers != null) {
 			this.serverWithoutListView.setAdapter(simplerAdapterHasNoUsers);

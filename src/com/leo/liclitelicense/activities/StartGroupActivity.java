@@ -50,7 +50,7 @@ public class StartGroupActivity extends Activity {
     	super.onCreate(savedInstanceState);
     	
 		//check sdcard storage
-		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+		if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){// use external stroage
 			
 			String mntSdcardDir = Environment.getExternalStorageDirectory().toString();
 			File dataDir = new File(mntSdcardDir + File.separator + LicLiteData.DIR);
@@ -59,7 +59,18 @@ public class StartGroupActivity extends Activity {
 			}
 			
 			LicLiteData.licLiteDataDir = mntSdcardDir + File.separator + LicLiteData.DIR;
+		}else{ //use internal storage
+			LicLiteData.licLiteDataDir = this.getFilesDir().toString();
 		}
+System.out.println("LicLiteData.licLiteDataDir--> " + LicLiteData.licLiteDataDir);
+
+		//check data folder size
+
+		if(UIUtil.getFileSize(new File(LicLiteData.licLiteDataDir)) >= LicLiteData.DATA_SIZE_UPPPER_LIMIT){
+System.out.println("data folder size is exceed upper limit " + LicLiteData.DATA_SIZE_UPPPER_LIMIT + " mb");		
+UIUtil.listAllFileNames();
+		}
+
     	
 //      super.requestWindowFeature(Window.FEATURE_NO_TITLE); // no title
         //customize title bar
@@ -89,7 +100,7 @@ public class StartGroupActivity extends Activity {
 		this.gridviewToolbar.setOnItemClickListener(new GridviewToolbarOnItemClickListenerImpl());
     }
 
-	private void switchActivity(int id) { // åˆ‡æ�¢é€‰ä¸­çš„æ“�ä½œ
+	private void switchActivity(int id) {
 		// set background pic for selected fragment pic
 		this.groupFragmentImageAdapter.setFocus(id); 
 		

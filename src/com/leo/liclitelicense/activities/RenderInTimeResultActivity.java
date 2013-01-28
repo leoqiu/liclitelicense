@@ -87,6 +87,7 @@ public class RenderInTimeResultActivity extends Activity {
 
 		
 		if(resultType == LicLiteData.IN_TIME_RESULT){
+System.out.println("in time result...");
 			RenderInTimeResultAsyncTask renderInTimeResultAsyncTask = new RenderInTimeResultAsyncTask(
 					renderServersWithoutUsersFragment, renderServersWithUsersFragment, this.gridviewToolbar, progress, loginIndex);
 			renderInTimeResultAsyncTask.execute();

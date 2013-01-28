@@ -94,6 +94,11 @@ public class RenderServersWithUsersFragment extends Fragment{
 			LayoutInflater layoutInflater = (LayoutInflater)context.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View myDialogView = layoutInflater.inflate(R.layout.alert_dialog_render_users_info, null);
 			ListView userInfoListView = (ListView) myDialogView.findViewById(R.id.listview_render_users_info);
+AutoCompleteTextView autoCompleteLookingForUsersInfo = (AutoCompleteTextView)myDialogView.findViewById(R.id.autocomplete_alert_render_users_info);
+autoCompleteLookingForUsersInfo.setDropDownWidth(0);
+autoCompleteLookingForUsersInfo.setHint("Search by user name");
+autoCompleteLookingForUsersInfo.setAdapter(simplerAdapterUsersInfoListView);
+
 			userInfoListView.setAdapter(simplerAdapterUsersInfoListView);
 			
 			Dialog dialog = new AlertDialog.Builder(context)

@@ -9,11 +9,13 @@ import com.leo.liclitelicense.R;
 import com.leo.liclitelicense.activities.RenderInTimeResultActivity;
 import com.leo.liclitelicense.beans.HistoryBean;
 import com.leo.liclitelicense.staticdata.LicLiteData;
+import com.leo.liclitelicense.utils.UIUtil;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,14 +110,9 @@ System.out.println("activity --> " + activity);
 	private ArrayList<HistoryBean> getHistoryBeanList(){
 		ArrayList<HistoryBean> historyBeans = new ArrayList<HistoryBean>();
 System.out.println("historyBeans size is -> " + historyBeans.size());		
-		
-		
-		File folder = new File(LicLiteData.licLiteDataDir);
-		if(!folder.exists()){
-			folder.mkdirs();
-		}
 
-		
+		File folder = new File(LicLiteData.licLiteDataDir);
+
 		File[] listOfFiles = folder.listFiles(); 
 		int lastIndex = listOfFiles.length - 1;
 

@@ -156,12 +156,13 @@ public class AddServerFragment extends Fragment {
 
 			if (!isFocused) {
 				String hostName = autoServerName.getText().toString();
-				System.out.println("is host reachable --> " + hostName
-						+ " --- ");
+				if(!hostName.equals("")){
+					System.out.println("is host reachable --> " + hostName
+							+ " --- ");
 
-				CheckServerAvaliabilityAsyncTask checkServerAvaliabilityAsyncTask = new CheckServerAvaliabilityAsyncTask(hostName, connectivityProgressBar, canBeConnectedTextView);
-				checkServerAvaliabilityAsyncTask.execute();
-
+					CheckServerAvaliabilityAsyncTask checkServerAvaliabilityAsyncTask = new CheckServerAvaliabilityAsyncTask(hostName, connectivityProgressBar, canBeConnectedTextView);
+					checkServerAvaliabilityAsyncTask.execute();
+				}
 			}
 		}
 

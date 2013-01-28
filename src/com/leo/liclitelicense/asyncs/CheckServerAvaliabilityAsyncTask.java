@@ -1,11 +1,10 @@
 package com.leo.liclitelicense.asyncs;
 
-import com.leo.liclitelicense.R;
+
 import com.leo.liclitelicense.staticdata.LicLiteData;
 
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.ConnectionInfo;
-
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.view.View;
@@ -46,10 +45,13 @@ private TextView canBeConnectedTextView = null;
 	protected Boolean doInBackground(Void... params) {	
 		
 		Connection conn = new Connection(hostName);
+//Connection conn2 = new Connection("192.168.1.1999");
 		ConnectionInfo connectionInfo = null;
 		try {
+//System.out.println("conn2 info is --> " + conn2.getConnectionInfo());
+//connectionInfo = conn.getConnectionInfo();
 			connectionInfo = conn.connect(null, LicLiteData.CONNECTION_AVALIABILITY_TIMEOUT, 0);
-
+//			connectionInfo = conn.connect();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

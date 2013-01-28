@@ -147,15 +147,24 @@ public class NetWorkUtil {
 		SCPClient scp = null;
         try {
         	session = connection.openSession();
-        	session.execCommand(cmd);
+String cmdMinqi = cmd + " > /tmp/licliteserver-`date +\"%Y-%m-%d-%H-%M-%S\"`";
+System.out.println("cmdMinqi - "  +cmdMinqi);
+//minqi
+session.execCommand(cmdMinqi);
+//        	session.execCommand(cmd);
         	
 //System.out.println("fileName -> " + getserverDataFileName(connection));
-//System.out.println("cmd - "  +cmd);	
         	
         	scp = connection.createSCPClient();
+//        	scp.get("/home/leo2/Desktop/log/licliteserver-*", LicLiteData.licLiteDataDir);
         	scp.get("/home/leo/Desktop/log/licliteserver-*", LicLiteData.licLiteDataDir);
+//minqi
+//scp.get("/tmp/licliteserver-*", LicLiteData.licLiteDataDir);
         	session2 = connection.openSession();
+//        	session2.execCommand("rm /home/leo2/Desktop/log/licliteserver-*");
         	session2.execCommand("rm /home/leo/Desktop/log/licliteserver-*");
+//minqi
+//session2.execCommand("rm /tmp/licliteserver-*");
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
